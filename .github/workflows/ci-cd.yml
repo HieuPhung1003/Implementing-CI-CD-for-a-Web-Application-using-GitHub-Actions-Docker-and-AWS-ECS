@@ -21,21 +21,24 @@ jobs:
       with:
         node-version: '18'
 
-    # 3. Build Docker image
-    - name: Build Docker image
-      run: |
-        docker build -t webapp-ci-cd .
+    # 3. Set up Docker Buildx (để build đúng kiến trúc amd64)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
     # 4. Login to AWS ECR
     - name: Login to AWS ECR
       uses: aws-actions/amazon-ecr-login@v1
 
-    # 5. Tag and push Docker image
-    - name: Push Docker image to ECR
+    # 5. Build, tag và push Docker image lên ECR
+    - name: Build and push Docker image
+      env:
+        ECR_REGISTRY: 155684259110.dkr.ecr.ap-southeast-2.amazonaws.com
+        ECR_REPOSITORY: webapp-ci-cd
+        IMAGE_TAG: latest
       run: |
-        IMAGE_URI=123456789012.dkr.ecr.us-east-1.amazonaws.com/webapp-ci-cd:latest
-        docker tag webapp-ci-cd:latest $IMAGE_URI
-        docker push $IMAGE_URI
+        docker buildx build --platform linux/amd64 -t $ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     # 6. Deploy to ECS
     - name: Deploy to ECS
