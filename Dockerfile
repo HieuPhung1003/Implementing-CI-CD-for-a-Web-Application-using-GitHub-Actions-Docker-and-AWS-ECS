@@ -5,14 +5,14 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json và package-lock.json
-COPY package*.json ./
+COPY apps/web-node/package*.json ./
 
 # Cài đặt dependencies
 # RUN npm install
 RUN npm ci --only=production
 
 # Copy toàn bộ source code
-COPY . .
+COPY apps/web-node ./
 
 # Expose port
 EXPOSE 3000
