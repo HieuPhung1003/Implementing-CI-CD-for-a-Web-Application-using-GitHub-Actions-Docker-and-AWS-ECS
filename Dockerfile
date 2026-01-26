@@ -8,8 +8,8 @@ WORKDIR /app
 COPY apps/web-node/package*.json ./
 
 # Cài đặt dependencies
-# RUN npm install
-RUN npm ci --only=production
+RUN npm install
+# RUN npm ci --only=production
 
 # Copy toàn bộ source code
 COPY apps/web-node ./
