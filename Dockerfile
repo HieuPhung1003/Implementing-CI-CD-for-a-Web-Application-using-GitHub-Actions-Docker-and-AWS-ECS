@@ -14,9 +14,6 @@ RUN npm install
 # Copy toàn bộ source code
 COPY apps/web-node ./
 
-# Tạo Prisma client
-RUN npx prisma generate
-
 # Expose port
 EXPOSE 3000
 
