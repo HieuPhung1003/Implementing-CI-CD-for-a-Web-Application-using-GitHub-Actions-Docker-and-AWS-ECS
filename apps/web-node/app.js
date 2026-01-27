@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 // web mới
 app.get('/', (req, res) => {
   res.send(`
-    <h1>Website mới đã được triển khai tự động!</h1>
+    <h1>Website đã được triển khai tự động!</h1>
     <p>Triển khai CI/CD với Docker + AWS ECS thành công 🎉</p>
   `);
 });
