@@ -31,7 +31,6 @@
 
 ## System Architecture Diagram
 
-```mermaid
 flowchart TB
     subgraph Dev[Developer / GitHub Repository]
         A1[Commit & Push Code] --> A2[GitHub Actions Workflow]
@@ -47,7 +46,7 @@ flowchart TB
         B3 -->|New image pushed| C1[ECR Repository]
         C1 -->|Triggers new deployment| D1[ECS Cluster]
         D1 --> D2[ECS Service]
-        D2 --> D3[ECS Task (Fargate Container)]
+        D2 --> D3["ECS Task (Fargate Container)"]
     end
 
     subgraph Runtime[Running Application]
@@ -62,3 +61,4 @@ flowchart TB
     class Dev,CI,AWS,Runtime aws;
     class A1,A2,B1,B2,B3 github;
     class D3,E1,F1 runtime;
+
