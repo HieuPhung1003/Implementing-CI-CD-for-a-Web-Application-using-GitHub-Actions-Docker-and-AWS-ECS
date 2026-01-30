@@ -1,33 +1,47 @@
 {{> header}}
 
-<div class="container">
-    <div class="glass-pane" style="max-width: 400px; margin: 4rem auto;">
-        <h2 class="text-center mb-4">Đăng Nhập</h2>
+<div class="auth-container">
+    <div class="auth-card glass-pane">
+        <div class="auth-header">
+            <h1 class="auth-title">🔐 Đăng Nhập</h1>
+            <p class="auth-subtitle">Nhập thông tin để truy cập kho hàng</p>
+        </div>
 
         {{#if error}}
-        <div
-            style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: center;">
-            {{error}}
+        <div class="alert alert-error">
+            <span>❌</span> {{error}}
         </div>
         {{/if}}
 
-        <form action="/login" method="POST">
+        <form action="/login" method="POST" class="auth-form">
             <div class="form-group">
                 <label class="form-label">Tên đăng nhập</label>
-                <input type="text" name="username" class="form-control" required>
+                <input type="text" name="username" class="form-control" placeholder="Nhập tên đăng nhập" required autofocus>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Mật khẩu</label>
-                <input type="password" name="password" class="form-control" required>
+                <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Đăng Nhập</button>
+            <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
         </form>
 
-        <p class="text-center" style="margin-top: 1.5rem; color: var(--text-muted);">
-            Chưa có tài khoản? <a href="/register" style="color: var(--primary-color);">Đăng ký ngay</a>
+        <div class="auth-divider">hoặc</div>
+
+        <p class="auth-footer">
+            Chưa có tài khoản? <a href="/register" class="auth-link">Đăng ký ngay</a>
         </p>
+    </div>
+
+    <div class="auth-info">
+        <h2>Quản lý kho hàng dễ dàng</h2>
+        <ul class="info-list">
+            <li>✅ Theo dõi tồn kho theo thời gian thực</li>
+            <li>✅ Quản lý sản phẩm và giá cả hiệu quả</li>
+            <li>✅ Xem lịch sử giao dịch chi tiết</li>
+            <li>✅ Xuất dữ liệu dễ dàng</li>
+        </ul>
     </div>
 </div>
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{pageTitle}}</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -10,18 +11,22 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="navbar-brand">WebInventory</div>
+            <div class="navbar-brand">🏢 WebInventory</div>
             <div class="nav-links">
-                <a href="/" class="nav-link">Trang chủ</a>
-                <a href="/about" class="nav-link">Giới thiệu</a>
+                <a href="/" class="nav-link {{#if currentPage}}{{#eq currentPage 'home'}}active{{/eq}}{{/if}}">Trang chủ</a>
+                {{#if user}}
+                <a href="/inventory" class="nav-link {{#if currentPage}}{{#eq currentPage 'inventory'}}active{{/eq}}{{/if}}">Kho hàng</a>
+                <a href="/history" class="nav-link {{#if currentPage}}{{#eq currentPage 'history'}}active{{/eq}}{{/if}}">Lịch sử</a>
+                {{/if}}
+                <a href="/about" class="nav-link {{#if currentPage}}{{#eq currentPage 'about'}}active{{/eq}}{{/if}}">Giới thiệu</a>
 
                 {{#if user}}
-                <a href="/inventory" class="nav-link">Kho hàng</a>
-                <a href="/history" class="nav-link">Lịch sử</a>
-                <a href="/logout" class="nav-link" style="color: #f87171;">Đăng xuất ({{user.username}})</a>
+                <div class="user-menu">
+                    <span class="user-info">👤 {{user.username}}</span>
+                    <a href="/logout" class="nav-link logout-link">Đăng xuất</a>
+                </div>
                 {{else}}
-                <a href="/login" class="nav-link btn btn-primary" style="padding: 0.5rem 1rem; color: white;">Đăng
-                    nhập</a>
+                <a href="/login" class="nav-link btn btn-primary" style="padding: 0.5rem 1rem; color: white; white-space: nowrap;">🔐 Đăng nhập</a>
                 {{/if}}
             </div>
         </nav>

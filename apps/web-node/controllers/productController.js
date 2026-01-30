@@ -156,14 +156,14 @@ exports.updateStock = (req, res) => {
 // Xem lịch sử giao dịch
 exports.getHistory = (req, res) => {
     const { username } = req.session;
-    const products = ProductModel.getAll(username);
-    const productInventory = products.reduce((acc, product) => {
-        acc[product.name] = product.quantity;
-        return acc;
-    }, {});
+
+    const transactions = TransactionModel.getAll(username); // 👈 THIẾU DÒNG NÀY
+
+    console.log("📜 History transactions:", transactions.length);
+
     res.render('history.hbs', {
         pageTitle: 'Lịch sử Kho hàng',
-        productInventory: productInventory
+        transactions: transactions   // 👈 PHẢI TRÙNG TÊN với {{#each transactions}}
     });
 };
 
