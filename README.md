@@ -29,36 +29,66 @@
 | **Giám sát hệ thống** | AWS CloudWatch | Theo dõi log và trạng thái container sau khi triển khai. | 
 | **Bảo mật truy cập** | AWS IAM + GitHub Secrets | Bảo mật thông tin đăng nhập và quyền truy cập các dịch vụ Cloud. |
 
-## System Architecture Diagram
+## 3. Kiến trúc hệ thống
+Hệ thống được triển khai theo mô hình *CI/CD tự động hóa trên AWS*, giúp tự động build – push – deploy ứng dụng Node.js mà không cần thao tác thủ công.  
+Pipeline được điều khiển bởi *GitHub Actions*, sử dụng *Docker*, *Amazon ECR*, *ECS (Fargate)* và *CloudWatch Logs* để đảm bảo quy trình triển khai liên tục, ổn định và bảo mật.
 
-flowchart TB
-    subgraph Dev[Developer / GitHub Repository]
-        A1[Commit & Push Code] --> A2[GitHub Actions Workflow]
-    end
+---
 
-    subgraph CI[Continuous Integration - GitHub Actions]
-        A2 --> B1[Build Docker Image]
-        B1 --> B2[Tag Image with 'latest']
-        B2 --> B3[Push to Amazon ECR]
-    end
+### 🖼️ Sơ đồ kiến trúc hệ thống
 
-    subgraph AWS[AWS Cloud]
-        B3 -->|New image pushed| C1[ECR Repository]
-        C1 -->|Triggers new deployment| D1[ECS Cluster]
-        D1 --> D2[ECS Service]
-        D2 --> D3["ECS Task (Fargate Container)"]
-    end
+<p align="center">
+  <img src="port3000.png" alt="Kiến trúc hệ thống CI/CD AWS ECS" width="750">
+</p>
 
-    subgraph Runtime[Running Application]
-        D3 -->|Serve HTTP traffic| E1[Public IP / ALB]
-        E1 --> F1[End User Browser]
-    end
+<p align="center"><em>Hình 1 – Kiến trúc hệ thống CI/CD triển khai ứng dụng Node.js trên AWS ECS Fargate</em></p>
 
-    %% Styles
-    classDef aws fill:#F2F7FF,stroke:#0073BB,stroke-width:1px;
-    classDef github fill:#FFF8F2,stroke:#FF9900,stroke-width:1px;
-    classDef runtime fill:#F9FFF2,stroke:#4CAF50,stroke-width:1px;
-    class Dev,CI,AWS,Runtime aws;
-    class A1,A2,B1,B2,B3 github;
-    class D3,E1,F1 runtime;
+---
 
+### 🔁 Mô tả quy trình hoạt động
+
+1. *Developer* push code lên GitHub repository.  
+2. *GitHub Actions* tự động kích hoạt workflow:
+   - Build Docker image của ứng dụng Node.js.  
+   - Push image mới lên *Amazon ECR*.  
+   - Cập nhật *ECS Service* để triển khai container mới (Fargate Task).  
+3. *ECS Fargate* tự động chạy container mới.  
+4. *CloudWatch Logs* thu thập và lưu trữ log ứng dụng.  
+5. Ứng dụng được truy cập qua *Public Internet* thông qua port *3000*.
+
+---
+
+### ⚙️ Các thành phần chính
+
+| Thành phần | Vai trò | Công nghệ / Dịch vụ |
+|-------------|----------|---------------------|
+| *GitHub Actions* | Tự động hóa quy trình build và deploy | CI/CD Pipeline |
+| *Docker* | Đóng gói ứng dụng Node.js | Containerization |
+| *Amazon ECR* | Lưu trữ Docker image | AWS Elastic Container Registry |
+| *Amazon ECS (Fargate)* | Chạy container mà không cần máy chủ | Serverless Container |
+| *CloudWatch Logs* | Theo dõi log ứng dụng và task ECS | AWS Monitoring |
+| *Public Internet (Port 3000)* | Cổng truy cập ứng dụng Node.js | Web Access Endpoint |
+
+---
+
+### 🌐 Luồng triển khai CI/CD
+
+```text
+Developer
+   │
+   ├── Push code lên GitHub
+   │
+   ▼
+GitHub Actions
+   ├── Build Docker Image
+   ├── Push lên ECR
+   └── Update ECS Service
+   │
+   ▼
+AWS ECS (Fargate)
+   ├── Tự động chạy container mới
+   └── Ghi log vào CloudWatch
+   │
+   ▼
+Public Internet (Port 3000)
+   └── Người dùng truy cập ứng dụng
